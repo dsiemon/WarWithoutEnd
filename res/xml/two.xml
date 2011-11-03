@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map tileWidth="32" tileHeight="32" widthInTiles="30" heightInTiles="30" background="0" theme="0">
+	<waypoints tracks="2">
+
+	</waypoints>
+	
+	<walls>
+		<rectangle x="-30" y="0" width="1020" height="30" />
+		<rectangle x="-30" y="990" width="1020" height="30" />
+		<rectangle x="-30" y="990" width="30" height="1020" />
+		<rectangle x="960" y="990" width="30" height="1020" />
+	</walls>
+	
+	<tiles>
+		<t r="0" c="0" type="1"/>
+		<t r="0" c="29" type="2"/>
+		<t r="29" c="0" type="3"/>
+		<t r="29" c="29" type="4"/>
+		<range r="0" c="2" width="1" height="30" type="0"/>
+		<range r="0" c="7" width="1" height="30" type="0"/>
+		<range r="0" c="12" width="1" height="30" type="0"/>
+		<range r="0" c="17" width="1" height="30" type="0"/>
+		<range r="0" c="22" width="1" height="30" type="0"/>
+		<range r="0" c="27" width="1" height="30" type="0"/>
+		
+	</tiles>
+</map>

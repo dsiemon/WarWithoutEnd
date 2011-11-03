@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<map tileWidth="32" tileHeight="32" widthInTiles="50" heightInTiles="25" background="0" theme="0">
+	<waypoints tracks="2">
+		<waypoint x="416" y="480" width="1184" height="96" priority="0">
+			<goalPost x="320" y="448" track="0"/>
+			<goalPost x="320" y="416" track="1"/>
+		</waypoint>
+		<waypoint x="320" y="800" width="96" height="416" priority="1">
+			<goalPost x="384" y="864"  track="0"/>
+			<goalPost x="352" y="864"  track="1"/>
+		</waypoint>
+		<spawn x="1580" y="448" track="0"/>
+		<spawn x="1580" y="416" track="1"/>
+		<start x="1600" y="512" width="64" height="160"/>
+		<goal x="288" y="864" width="160" height="64"/>
+	</waypoints>
+	
+	<walls>
+		<rectangle x="0" y="384" width="1600" height="384" />
+		<rectangle x="0" y="800" width="320" height="800" />
+		<rectangle x="416" y="800" width="1184" height="320" />
+		
+	</walls>
+	
+	<tiles>
+		<t r="0" c="0" type="1"/>
+		<t r="0" c="49" type="2"/>
+		<t r="24" c="0" type="3"/>
+		<t r="24" c="49" type="4"/>
+		<range r="12" c="10" width="40" height="3" type="0"/>
+		<range r="15" c="10" width="3" height="10" type="0"/>
+	</tiles>
+</map>

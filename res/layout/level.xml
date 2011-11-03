@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" 
+  xmlns:android="http://schemas.android.com/apk/res/android">
+   <ImageView 
+          android:id="@+id/mainMenuBackground"
+          android:src="@drawable/title_background"
+          android:adjustViewBounds="true"
+          android:gravity="center_vertical"
+          android:scaleType="fitXY"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          android:layout_x="0dp" 
+          android:layout_y="0dp" />
+<TextView android:text="Level 1" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<Button android:text="One" android:id="@+id/levelButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_x="0dp" android:layout_y="0dp"></Button>
+<Button android:text="Two" android:id="@+id/levelTwoButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_x="100dp" android:layout_y="0dp"></Button>
+</AbsoluteLayout>

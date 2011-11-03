@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout 
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" 
+  android:background="#FFFFFF"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+   <ImageView 
+    			android:id="@+id/turretbackground"
+			    android:src="@drawable/turret_background"
+			    android:adjustViewBounds="true"
+			    android:gravity="center_vertical"
+			    android:layout_width="fill_parent" 
+   				android:layout_height="fill_parent" 
+   				android:clickable="false"
+   				fadingEdge="0x00002000"
+   				android:scaleType="fitXY"
+   				
+			 />
+
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+				<TextView android:gravity="left" android:layout_alignParentLeft="true"  android:layout_alignParentTop="true"
+					android:id="@+id/turretMenuText"
+				    android:layout_width="wrap_content"
+				    android:textSize = "17sp"
+				    android:textColor = "#FFFFFF"
+				    android:singleLine="false" 
+				    android:scrollbars="vertical"
+				    android:layout_height="wrap_content"
+				    android:clickable="false"
+				    android:text="Select Turret" 
+				    android:paddingLeft="15dp" 
+				    android:paddingRight="15dp" 
+				    android:paddingTop="15dp"
+				    android:layout_marginBottom="20dp"/>
+				<TextView android:gravity="right" android:layout_alignParentRight="true" android:layout_alignParentTop="true"
+					android:id="@+id/turretMenuCurrency"
+				    android:layout_width="wrap_content"
+				    android:textSize = "17sp"
+				    android:textColor = "#FFFFFF"
+				    android:singleLine="false" 
+				    android:scrollbars="vertical"
+				    android:layout_height="wrap_content"
+				    android:clickable="false"
+				    android:text="0" 
+				    android:paddingLeft="15dp" 
+				    android:paddingRight="15dp" 
+				    android:paddingTop="15dp"
+				    android:layout_marginBottom="20dp"/>
+				
+			
+<TableLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/turretMenuText" android:id="@+id/TurretTable"  android:layout_alignParentLeft="true" >
+<TableRow android:id="@+id/TableRow00" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ImageView android:id="@+id/lightTurretIcon" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>
+</TableRow>
+<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ImageView android:id="@+id/lightTurretIconT1" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>
+</TableRow>
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ImageView android:id="@+id/lightTurretIconT2" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>
+</TableRow>
+<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content">
+<ImageView android:id="@+id/destroyTurretIcon" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/destroy_turret_icon"></ImageView>
+</TableRow>
+</TableLayout>
+				<TextView android:gravity="right" android:layout_alignParentRight="true" android:layout_below="@+id/turretMenuCurrency" android:layout_toRightOf="@+id/turretMenuText"
+					android:id="@+id/turretMenuName"
+				    android:layout_width="wrap_content"
+				    android:textSize = "17sp"
+				    android:textColor = "#FFFFFF"
+				    android:singleLine="false" 
+				    android:scrollbars="vertical"
+				    android:layout_height="wrap_content"
+				    android:clickable="false"
+				    android:text="Light Turret Test" 
+				    android:layout_marginRight="10dp"
+				    />
+				<TextView
+					android:id="@+id/turretMenuDescription"
+					android:layout_alignParentRight="true"
+					android:layout_below="@+id/turretMenuName"
+					android:layout_toRightOf="@+id/turretMenuText"
+				    android:layout_width="fill_parent"
+				    android:textSize = "17sp"
+				    android:textColor = "#FFFFFF"
+				    android:singleLine="false" 
+				    android:scrollbars="vertical"
+				    android:layout_height="wrap_content"
+				    android:clickable="true"
+				    android:text="This is a test description blah blah dddsdfsdfsdfsdf." 
+				    android:paddingLeft="15dp" 
+				    android:paddingRight="15dp" 
+				    android:paddingTop="15dp"
+				    android:layout_marginRight="10dp"/>
+<ImageView android:id="@+id/turretOk" android:layout_alignParentBottom="true"  android:layout_alignParentLeft="true" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:layout_width="wrap_content" android:layout_marginLeft="30dp" android:clickable="true" android:src="@drawable/ui_button_ok"></ImageView>
+<ImageView android:id="@+id/turretCancel" android:layout_alignParentBottom="true"  android:layout_alignParentRight="true" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:layout_width="wrap_content" android:layout_marginRight="30dp" android:clickable="true" android:src="@drawable/ui_button_cancel"></ImageView>
+
+
+</RelativeLayout>
+
+</FrameLayout>

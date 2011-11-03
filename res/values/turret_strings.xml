@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="light_turret_name">Light Turret</string>
+<string name="light_turret_description">A cheep light powered machine gun.</string>
+<string name="destroy_turret_name">Destroy Turret</string>
+<string name="destroy_turret_description">Remove a turret from the map, returns a portion of the cost of the turret.</string>
+</resources>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout 
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" 
+  android:background="#FFFFFF"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+   <ImageView 
+    			android:id="@+id/endbackground"
+			    android:src="@drawable/end_background"
+			    android:adjustViewBounds="true"
+			    android:gravity="center_vertical"
+			    android:layout_width="fill_parent" 
+   				android:layout_height="fill_parent" 
+   				android:clickable="false"
+   				fadingEdge="0x00002000"
+   				android:scaleType="fitXY"
+   				
+			 />
+
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+				<TextView android:gravity="center" android:layout_alignParentLeft="true" android:layout_alignParentRight="true" android:layout_alignParentTop="true"
+					android:id="@+id/endstatustext"
+				    android:layout_width="fill_parent"
+				    android:textSize = "17sp"
+				    android:textColor = "#FFFFFF"
+				    android:singleLine="false" 
+				    android:scrollbars="vertical"
+				    android:layout_height="wrap_content"
+				    android:clickable="false"
+				    android:text="Game Over" 
+				    android:paddingLeft="15dp" 
+				    android:paddingRight="15dp" 
+				    android:paddingTop="15dp"/>
+				
+			
+<TableLayout android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/endstatustext" android:id="@+id/TextTable"  android:layout_alignParentLeft="true" android:layout_alignParentRight="true">
+<TableRow android:id="@+id/TableRow00" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	<TextView android:text="Kills:" android:layout_weight="1" android:id="@+id/mobsKilledLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/mobsKilledValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+	<TextView android:text="Time:" android:layout_weight="1" android:id="@+id/timePlayedLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/timePlayedValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+</TableRow>
+<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	<TextView android:text="Spindles:" android:layout_weight="1" android:id="@+id/spindlesKilledLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/SpindlesKilledValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+	<TextView android:text="Total Points:" android:layout_weight="1" android:id="@+id/totalPointsLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/totalPointsValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+</TableRow>
+<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content">
+	<TextView android:text=" :" android:layout_weight="1" android:id="@+id/KilledLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/KilledValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+	<TextView android:text="Ending Points:" android:layout_weight="1" android:id="@+id/endingPointsLabel" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	<TextView android:text="0" android:layout_weight="1" android:id="@+id/endingPointsValue" android:textSize = "17sp" android:textColor = "#FFFFFF" android:paddingLeft="15dp" ></TextView>
+	
+</TableRow>
+</TableLayout>
+
+<ImageView android:id="@+id/endOk" android:layout_alignParentBottom="true"  android:layout_alignParentRight="true" android:layout_height="wrap_content" android:layout_marginBottom="20dp" android:layout_width="wrap_content" android:layout_marginRight="30dp" android:clickable="true" android:src="@drawable/ui_button_ok"></ImageView>
+
+
+</RelativeLayout>
+
+
+</FrameLayout>

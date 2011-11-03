@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<image width="320" height="320">
+	<coordinates name="spindle_1" x="0"   y="0"   width="32"  height="32"/>
+	<coordinates name="spindle_2" x="32"  y="0"   width="32"  height="32"/>
+	<coordinates name="spindle_3" x="64"   y="0"   width="32"  height="32"/>
+	<coordinates name="spindle_4" x="96"  y="0"   width="32"  height="32"/>
+	<coordinates name="turret_base" x="0"  y="32"    width="32"  height="32"/>
+	<coordinates name="turret_light_gun_1" x="64" y="32"   width="64"  height="64"/>
+	<coordinates name="turret_light_gun_2" x="128" y="32"   width="64"  height="64"/>
+	<coordinates name="light_bullet" x="0"  y="64"    width="4"  height="4"/>
+</image>
