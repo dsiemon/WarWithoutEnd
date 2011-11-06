@@ -18,6 +18,37 @@ package des.game.wwe;
 import des.game.base.BaseObject;
 
 public class GamePreferences extends BaseObject{
+	public enum PreferenceType{
+		INVALID(-1),
+		MOB_SPEED(0),
+		MOB_SPEED_INC(1),
+        OBJECT_COUNT(-1);
+        private final int mIndex;
+        PreferenceType(int index) {
+            this.mIndex = index;
+        }
+        
+        public int index() {
+            return mIndex;
+        }
+        
+        public static PreferenceType indexToType(int index) {
+            final PreferenceType[] valuesArray = values();
+            
+            PreferenceType foundType = INVALID;
+            for (int x = 0; x < valuesArray.length; x++) {
+                PreferenceType type = valuesArray[x];
+                if (type.mIndex == index) {
+                    foundType = type;
+                    break;
+                }
+            }
+            return foundType;
+        }
+	}
+	
+	public Preference[] preferences = new Preference[PreferenceType.OBJECT_COUNT.ordinal()];
+	
 	//////////////////////////////////////////////////////////////
 	////////////////// default Value /////////////////////////
 	//////////////////////////////////////////////////////////////
@@ -171,6 +202,9 @@ public class GamePreferences extends BaseObject{
 	
 	public GamePreferences(){
 		super();
+		
+		this.preferences[PreferenceType.MOB_SPEED.index()] = new Preference(0,0,0);
+		
 		setDefault();
 	}
 	
@@ -181,7 +215,13 @@ public class GamePreferences extends BaseObject{
 	}
 	
 	public void setDefault(){
+		final int count = this.preferences.length;
 		
+		for(int i = 0; i < count; i++){
+			if(this.preferences[i] != null){
+				this.preferences[i].setDefault();
+			}
+		}
 	}
 	public void setHard(){
 		
