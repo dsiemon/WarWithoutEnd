@@ -5,7 +5,7 @@ public class Preference {
 	public float value;
 	public float min;
 	public float max;
-	
+	 
 	public Preference(float value, float defaultValue, float min, float max){
 		this.value = value;
 		this.defaultValue = defaultValue;
