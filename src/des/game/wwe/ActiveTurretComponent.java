@@ -17,8 +17,10 @@ package des.game.wwe;
 
 import des.game.base.BaseObject;
 import des.game.base.GameComponent;
+import des.game.wwe.WWEObjectFactory.GameObjectType;
 
 public class ActiveTurretComponent extends GameComponent {
+	
 	public ActiveTurretComponent(){
 		super();
 		super.setPhase(GameComponent.ComponentPhases.POST_PHYSICS.ordinal());
@@ -35,6 +37,9 @@ public class ActiveTurretComponent extends GameComponent {
 	}
 	public int getAmmo(){
 		return 0;
+	}
+	public float percentNextFireTime(){
+		return 1;
 	}
 	public void handleInputStart(float touchX, float touchY){
 		
@@ -54,4 +59,13 @@ public class ActiveTurretComponent extends GameComponent {
 	public void handleDeactivate(){
 		
 	}
+	
+	public void passiveAttack(float positionX, float positionY, float orientation, float timeToTarget){
+	
+	}
+	
+	public WWEObjectFactory.GameObjectType getTurretBottomType(){
+		return WWEObjectFactory.GameObjectType.TURRET_BASIC_BOTTOM;
+	}
+	
 }

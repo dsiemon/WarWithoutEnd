@@ -32,7 +32,7 @@ public class TurretComponent extends CollisionComponent{
 	
 	public static final int INVALID = -1;
 	public static final int LIGHT_GUN = 0;
-	
+	public static final int AUTO_TURRET = WWEObjectFactory.GameObjectType.AUTO_TURRET.index();
 	// turrent attributes
 	public float fireHoldTime;
 	public float activeFireRate; //
@@ -41,6 +41,7 @@ public class TurretComponent extends CollisionComponent{
 	public int projectileType;
 	public float projectileSpeed; // pixels per second 
 	public float maxAmmoCapacity;
+	public float turretRadius;
 	
 	public int turretValue;
 	public int turretXIndex;
@@ -50,7 +51,9 @@ public class TurretComponent extends CollisionComponent{
 	public float currentAmmo;
 	public float timeSinceFire;
 	
-	
+	public float timeToTarget;
+	public float xOffset;
+	public float yOffset;
 	public Vector2 targetLocation;
 	public Vector2 targetVelocity;
 	public boolean targetAquired;
@@ -60,6 +63,8 @@ public class TurretComponent extends CollisionComponent{
 	public ActiveTurretComponent activeBehavior;
 	public boolean active;
 	public boolean die;
+	
+	public GameObject turretBottom;
 	
 	public TurretComponent(){
 		super();
@@ -82,7 +87,7 @@ public class TurretComponent extends CollisionComponent{
 		// turret data
 		currentAmmo = 0.0f;
 		timeSinceFire = MAX_TIME;
-		
+		turretRadius = TURRET_RADIUS;
 		die = false;
 	}
 	public TurretComponent(PhysicsObject physicsObject){
@@ -106,7 +111,7 @@ public class TurretComponent extends CollisionComponent{
 		// turret data
 		currentAmmo = 0.0f;
 		timeSinceFire = MAX_TIME;
-		
+		turretRadius = TURRET_RADIUS;
 		die = false;
 	}
 	@Override
@@ -119,7 +124,7 @@ public class TurretComponent extends CollisionComponent{
 		super.reset();
 
 		currentDistance = -1;
-		
+		timeToTarget = 0;
 		// turrent attributes
 		activeFireRate = 0.0f; //
 		inactiveFireRate = 0.0f; // shots per second
@@ -131,6 +136,7 @@ public class TurretComponent extends CollisionComponent{
 		// turret data
 		currentAmmo = 0.0f;
 		timeSinceFire = MAX_TIME;
+		turretRadius = TURRET_RADIUS;
 		die = false;
 	}
 	
@@ -166,6 +172,10 @@ public class TurretComponent extends CollisionComponent{
 		
 		if(die){
 			BaseObject.sSystemRegistry.gameObjectManager.destroy(gameObject);
+			
+			if(turretBottom != null){
+				BaseObject.sSystemRegistry.gameObjectManager.destroy(turretBottom);
+			}
 		}
 	}
 	
@@ -195,25 +205,15 @@ public class TurretComponent extends CollisionComponent{
 		timeSinceFire = 0;
 		final float x = (float)this.physicsObject.location.getX();
 		final float y = (float)this.physicsObject.location.getY();
-		switch(projectileType){
-			case TurretComponent.LIGHT_GUN:
-				//DebugLog.e("turret", "before fire!");
-				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnLightBullet(x, y, targetAngle.orientation()));
-				//DebugLog.e("turret", "after fire!");
-				break;
-			case TurretComponent.INVALID:
-	 		 
-				
-			
-				
-			
-		}
+		final float orientation = targetAngle.orientation();
+		this.activeBehavior.passiveAttack((float)Math.cos(orientation)*this.turretRadius + x, (float)Math.sin(orientation)*this.turretRadius +y, orientation, timeToTarget);
 	}
 	private void calculateTargetAngle(final Vector2 targetAngle,final Vector2 location){ 
-		float timeToTarget = (((float)Math.sqrt(currentDistance)) - TURRET_RADIUS)/projectileSpeed;
+		float timeToTarget = (((float)Math.sqrt(currentDistance)) - this.turretRadius)/projectileSpeed;
 		final float x = (targetLocation.x + (targetVelocity.x * timeToTarget)) - location.x;
 		final float y = (targetLocation.y + (targetVelocity.y * timeToTarget)) - location.y;
 		
+		this.timeToTarget = timeToTarget;
 		targetAngle.x = x;
 		targetAngle.y = y;
 		

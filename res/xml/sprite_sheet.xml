@@ -4,8 +4,14 @@
 	<coordinates name="spindle_2" x="32"  y="0"   width="32"  height="32"/>
 	<coordinates name="spindle_3" x="64"   y="0"   width="32"  height="32"/>
 	<coordinates name="spindle_4" x="96"  y="0"   width="32"  height="32"/>
-	<coordinates name="turret_base" x="0"  y="32"    width="32"  height="32"/>
+	<coordinates name="turret_basic_bottom" x="0"  y="32"    width="64"  height="64"/>
 	<coordinates name="turret_light_gun_1" x="64" y="32"   width="64"  height="64"/>
 	<coordinates name="turret_light_gun_2" x="128" y="32"   width="64"  height="64"/>
-	<coordinates name="light_bullet" x="0"  y="64"    width="4"  height="4"/>
+	<coordinates name="turret_auto_cannon_1" x="64" y="96"   width="64"  height="64"/>
+	<coordinates name="turret_auto_cannon_2" x="128" y="96"   width="64"  height="64"/>
+	<coordinates name="turret_auto_cannon_3" x="192" y="96"   width="64"  height="64"/>
+	<coordinates name="turret_auto_cannon_attack_1" x="256" y="96"   width="64"  height="64"/>
+	<coordinates name="turret_auto_cannon_attack_2" x="256" y="32"   width="64"  height="64"/>
+	<coordinates name="light_bullet" x="0"  y="96"    width="4"  height="4"/>
+	<coordinates name="auto_bullet" x="4"  y="96"    width="4"  height="4"/>
 </image>

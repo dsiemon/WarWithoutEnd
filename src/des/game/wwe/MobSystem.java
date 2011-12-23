@@ -18,35 +18,34 @@ package des.game.wwe;
 import des.game.base.BaseObject;
 import des.game.base.Vector2;
 import des.game.scale.GameFlowEvent;
+import des.game.wwe.GamePreferences.PreferenceType;
 
 public class MobSystem extends BaseObject {
 	Vector2 spawns[]= {new Vector2(), new Vector2(),new Vector2(),new Vector2()};
 
 	public static final int GAME_OVER_EVENT = GameFlowEvent.EVENT_GAME_OVER;
 	public static final int END_GAME_INDEX = 0;
-	 
-	int numTracks;
 	
+	public static final int WAITING = 0;
+	public static final int SPAWNING = 1;
+	
+	int state;
+	int numTracks;
 	int mobsAlive;
 	
 	int currentWave;
-	int currentGroup;
-	int maxWaves; // if the level has a cap on the number of waves coming
+	MobWave wave;
 	
-	int waveStrength; //number of groups
-	int groupStrength; // number of mobs in a group(different mobs will have different strengths the total should equal this)
+
 	
 	float timeSinceStart; // total time 
 	float timeSinceLastWave; // time since last wave started
-	float timeSinceLastGroup; // time since last group was spawned
-	
 	float waveInterval; // time to wait for next wave
-	float groupInterval; // time to wait for next group
-	float minWaveInterval; // minimum time to wait between waves
-	float minGroupInterval; // minimum time to wait between groups
+
 	
 	public MobSystem(){
 		super();
+		wave = new MobWave();
 		init();
 	}
 	@Override
@@ -55,54 +54,36 @@ public class MobSystem extends BaseObject {
 	}
 	public void init(){
 		numTracks  = 1;
-
 		mobsAlive = 0;
-		
 		currentWave = 0;
-		currentGroup = 0;
-		maxWaves = 200; 
-		
-		waveStrength = 3;
-		groupStrength = 2;
-		
 		timeSinceStart = 0; 
 		timeSinceLastWave = 0; 
-		timeSinceLastGroup = 0; 
-		
-		waveInterval = 9; 
-		groupInterval = 1f; 
-		minWaveInterval = 4; 
-		minGroupInterval = 0.1f; 
+		waveInterval = WWEObjectRegistry.preferences.preferences[GamePreferences.PreferenceType.WAVE_FREQUENCY.index()].value; 
+		state = WAITING;
 	} 
 	@Override
 	public void update(float timeDelta, BaseObject parent){
 		final int livesLeft = WWEObjectRegistry.gameDataSystem.localData.livesLeft;
+		timeSinceStart += timeDelta;
 		
 		if(livesLeft >= 0){
-			// update timing
-			timeSinceStart += timeDelta; 
-			timeSinceLastWave += timeDelta; 
-			timeSinceLastGroup += timeDelta; 
-			
-			//do we have groups left to spawn?
-			if(currentGroup < waveStrength){
-				// have we waited long enough to spawn a group?
-				if(timeSinceLastGroup >= groupInterval){
-					timeSinceLastGroup = 0;
-					currentGroup++;
-					// spawn group
-					mobsAlive++;
-					BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnSpindle(725, 212, true));
-					BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnSpindle(752, 212, true));
+			if(state == WAITING){
+				timeSinceLastWave += timeDelta;
+				
+				if(timeSinceLastWave >= waveInterval){
+					endWait();
 				}
 			}
-			// if not is it time for another wave?
-			else if(timeSinceLastWave >= waveInterval){
-				if(currentWave < maxWaves - 1){
-					// reset the group count and other changes per wave here
-					timeSinceLastWave = 0;
-					currentGroup = 0;
-					currentWave++;
+			
+			if(state == SPAWNING){
+				// is this wave over?
+				if(wave.isDone() && mobsAlive == 0){
+					this.endWave();
+				}
+				else{
+					if(!wave.isDone()){
+						wave.update(timeDelta, this);
+					}
 				}
 			}
 		}
@@ -112,6 +93,11 @@ public class MobSystem extends BaseObject {
 		}
 		
 		
+	}
+	
+	public void spawnMob(WWEObjectFactory.GameObjectType type, int track){
+		mobsAlive++;
+		BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnMob(spawns[track].x, spawns[track].y, track, type));
 	}
 	
 	public void mobKilled(MobComponent mob){
@@ -133,4 +119,29 @@ public class MobSystem extends BaseObject {
 	public void setTracks(int tracks){
 		numTracks = tracks;
 	}
+	
+	public float getTimeUntilWave(){
+		float time = -1;
+		if(state == WAITING){
+			time = waveInterval - timeSinceLastWave;
+		}
+		
+		return time;	
+	}
+	
+	public void endWait(){
+		if(state == WAITING){
+			this.state = SPAWNING;
+			this.timeSinceLastWave = 0;
+			
+			wave.setupWave(MobWave.GetWaveGroups((int)WWEObjectRegistry.preferences.preferences[GamePreferences.PreferenceType.WAVE_DIFFICULTY.index()].value,(int)WWEObjectRegistry.preferences.preferences[GamePreferences.PreferenceType.MOB_TECH.index()].value),
+					numTracks,  WWEObjectRegistry.preferences.preferences[GamePreferences.PreferenceType.GROUP_FREQUENCY.index()].value);
+		}
+	}
+	
+	public void endWave(){
+		this.state = WAITING;
+	
+	}
+	
 }

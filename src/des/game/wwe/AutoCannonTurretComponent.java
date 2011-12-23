@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2011 Douglas Siemon
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package des.game.wwe;
 
 import des.game.base.BaseObject;
@@ -21,25 +6,26 @@ import des.game.base.GameObject;
 import des.game.base.Vector2;
 import des.game.scale.GenericAnimationComponent;
 
-
-public class LightTurretComponent extends ActiveTurretComponent {
-	
-	public static final float RADIUS = 20;
-	public static final float RELOAD_RATE = 2;
+public class AutoCannonTurretComponent extends ActiveTurretComponent {
+	public static final float RADIUS = 24;
+	public static final float RELOAD_RATE = 1;
 	public static final float RELOAD_DELAY = 1;
 	
-	public static final float MAX_AMMO = 30f;
-	public static final float FIRE_RATE = 0.1f;
-	
+	public static final float MAX_AMMO = 5f;
+	public static final float FIRE_RATE = 1f;
+	public static final float BURST_RATE = .1f;
+	public static final int   BURST_COUNT = 3;
 	public boolean active;
 	public float ammo;
 	public float lastFireTime;
+	public int burstCount;
+	
 	
 	public float inputX;
 	public float inputY;
 	public boolean inputReceived;
 	
-	public LightTurretComponent(){
+	public AutoCannonTurretComponent(){
 		super();
 		init();
 	}
@@ -52,6 +38,7 @@ public class LightTurretComponent extends ActiveTurretComponent {
 	public void init(){
 		inputX = inputY = lastFireTime = 0.0f;
 		active = inputReceived = false;
+		burstCount = 0;
 		ammo = MAX_AMMO;
 		lastFireTime = FIRE_RATE;
 	}
@@ -71,30 +58,47 @@ public class LightTurretComponent extends ActiveTurretComponent {
 			}
 		}
 		
-		if(active && inputReceived){
+		if(active){
 			final GameObject gameObject = (GameObject)parent;
-			DebugLog.e("turret", "input received. ammo: " + ammo + " delta: " + timeDelta);
-			inputReceived = false;
-			
+			DebugLog.e("turret", "input received.AUTO ammo: " + ammo + " delta: " + timeDelta);
 			// set the orientation
 			final Vector2 targetAngle = gameObject.targetVelocity;
-			final Vector2 location = gameObject.mPosition;
+			final Vector2 location = gameObject.mPosition;	
 			
-			// look at the target
-			targetAngle.x = inputX - location.x;
-			targetAngle.y = inputY - location.y;
+			if(inputReceived){
+				// look at the target
+				targetAngle.x = inputX - location.x;
+				targetAngle.y = inputY - location.y;
+			}
 			
 			// can we fire?
-			if(lastFireTime >= FIRE_RATE && ammo >= 1f){
+			if(lastFireTime >= FIRE_RATE && ammo >= 1f && burstCount == 0 && inputReceived){
 				lastFireTime = 0;
 				ammo -= 1f;
-				DebugLog.e("turret", "bullets fired!");
+				DebugLog.e("turret", "auto start burst bullets fired!");
 				gameObject.setCurrentAction(GenericAnimationComponent.Animation.ATTACK);
 				final float orientation = targetAngle.orientation();
-
-				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
+				burstCount = 1;
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.AUTO_BULLET));
+			}
+			else if(burstCount != 0 && lastFireTime >= BURST_RATE){
+				lastFireTime = 0;
+				DebugLog.e("turret", "auto burst bullets fired!");
+				gameObject.setCurrentAction(GenericAnimationComponent.Animation.ATTACK);
+				final float orientation = targetAngle.orientation();
+				burstCount++;
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.AUTO_BULLET));
+				if(burstCount >= BURST_COUNT){
+					burstCount = 0;
+				}
+			}
+			
+			if(inputReceived){
+				inputReceived = false;
 			}
 		}
+		
+
 	}
 	@Override
 	public void handleInputStart(float touchX, float touchY){
@@ -121,16 +125,19 @@ public class LightTurretComponent extends ActiveTurretComponent {
 	@Override
 	public void handleDeactivate(){
 		this.active = false;
+		this.burstCount = 0;
 	}
 	
 	@Override
 	public void passiveAttack(float positionX, float positionY, float orientation, float timeToTarget){
-		BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile(positionX, positionY, orientation,timeToTarget,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
+		BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile(positionX, positionY, orientation,timeToTarget,WWEObjectFactory.GameObjectType.AUTO_BULLET));
 	}
-	
 	@Override
 	public float percentNextFireTime(){
 		float rtn = this.lastFireTime/this.FIRE_RATE;
+		if(this.burstCount != 0){
+			rtn = 0;
+		}
 		if(rtn > 1){
 			rtn = 1;
 		}

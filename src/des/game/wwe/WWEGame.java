@@ -92,8 +92,10 @@ public class WWEGame extends Game {
         uiSystem.setDigitDrawables(digits);
         uiSystem.setGridDrawable(gridDrawable);
         
+        uiSystem.setReloadIcon(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.reload_icon), 0, 0));
         uiSystem.setRemoveTurretIcon(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.destroy_turret_icon), 0, 0));
         uiSystem.setLightTurretIcon(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.light_turret_icon), 0, 0));
+        uiSystem.setAutoTurretIcon(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.auto_turret_icon), 0, 0));
         uiSystem.setActiveTurretIcon(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.fire_icon), 0, 0));
         uiSystem.setLivesLabel(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.lives_icon), 0, 0));
         uiSystem.setPointsLabel(new DrawableBitmap(longTermTextureLibrary.allocateTexture(R.drawable.currency_icon), 0, 0));

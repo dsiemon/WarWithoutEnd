@@ -28,8 +28,7 @@ public class WaypointComponent extends CollisionComponent {
 	
 	public WaypointGoalPost track0;
 	public WaypointGoalPost track1;
-	public WaypointGoalPost track2;
-	public WaypointGoalPost track3;
+
 	
 	public WaypointComponent(){
 		super();
@@ -82,12 +81,7 @@ public class WaypointComponent extends CollisionComponent {
 				case 1:
 					track1.getDirection((float)mob.physicsObject.location.getX(), (float)mob.physicsObject.location.getY(), mob.waypointGoal);
 					break;
-				case 2:
-					track2.getDirection((float)mob.physicsObject.location.getX(), (float)mob.physicsObject.location.getY(), mob.waypointGoal);
-					break;
-				case 3:
-					track3.getDirection((float)mob.physicsObject.location.getX(), (float)mob.physicsObject.location.getY(), mob.waypointGoal);
-					break;
+
 					default:
 						assert(false);
 				}

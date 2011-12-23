@@ -95,6 +95,9 @@ public class TurretActivity extends Activity {
         ImageView lightTurret = (ImageView)findViewById(R.id.lightTurretIcon);
         lightTurret.setOnClickListener(mSelectLightTurretListener);
         
+        ImageView autoTurret = (ImageView)findViewById(R.id.autoTurretIcon);
+        autoTurret.setOnClickListener(mSelectAutoTurretListener);
+        
         ImageView destroyTurret = (ImageView)findViewById(R.id.destroyTurretIcon);
         destroyTurret.setOnClickListener(mSelectDestroyTurretListener);
         
@@ -109,7 +112,15 @@ public class TurretActivity extends Activity {
 		public void onClick(View arg0) {
 			nameText.setText(getString(R.string.light_turret_name));
 			descriptionText.setText(getString(R.string.light_turret_description));
-			selectTurretValue = 0;
+			selectTurretValue = TurretComponent.LIGHT_GUN;
+		}
+    };
+    
+    private OnClickListener mSelectAutoTurretListener = new OnClickListener() {
+		public void onClick(View arg0) {
+			nameText.setText(getString(R.string.auto_turret_name));
+			descriptionText.setText(getString(R.string.auto_turret_description));
+			selectTurretValue = TurretComponent.AUTO_TURRET;
 		}
     };
     private OnClickListener mSelectDestroyTurretListener = new OnClickListener() {

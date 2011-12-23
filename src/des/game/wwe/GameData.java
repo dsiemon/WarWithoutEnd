@@ -60,7 +60,7 @@ public class GameData {
 		turretsCreated = 0;
 		projectilesFired = 0;
 		
-		livesLeft = 4;
+		livesLeft = 99;
 	}
 	public void add(GameData other){
 		totalCurrency += other.totalCurrency;

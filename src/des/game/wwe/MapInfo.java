@@ -30,7 +30,8 @@ import des.game.scale.ScaleObjectFactory;
 import android.content.res.XmlResourceParser;
 
 public class MapInfo {
-	
+	public float scrollX;
+	public float scrollY;
     public int mWidthInTiles;
     public int mHeightInTiles;
     public int mTileWidth;
@@ -52,8 +53,7 @@ public class MapInfo {
 		int priorityWay = 0;
 		WaypointGoalPost track0 = null;
 		WaypointGoalPost track1 = null;
-		WaypointGoalPost track2 = null;
-		WaypointGoalPost track3 = null;
+
 		
 		try {
 			parser.next();
@@ -68,6 +68,8 @@ public class MapInfo {
 		    			mHeightInTiles = Integer.parseInt(parser.getAttributeValue(null, "heightInTiles"));
 		    			background = Integer.parseInt(parser.getAttributeValue(null, "background"));
 		    			theme = Integer.parseInt(parser.getAttributeValue(null, "theme"));
+		    			scrollX = Float.parseFloat(parser.getAttributeValue(null, "scrollX"));
+		    			scrollY = Float.parseFloat(parser.getAttributeValue(null, "scrollY"));
 		    		}
 		    		else if(parser.getName().compareTo("rectangle") == 0){
 		    			GameObject wall = factory.spawnInvisibleWall(Integer.parseInt(parser.getAttributeValue(null, "x")), 
@@ -129,12 +131,6 @@ public class MapInfo {
 		    			case 1:
 		    				track1 = goal;
 		    				break;
-		    			case 2:
-		    				track2 = goal;
-		    				break;
-		    			case 3:
-		    				track3 = goal;
-		    				break;
 		    			}
 		    		}
 		    	}
@@ -143,7 +139,7 @@ public class MapInfo {
 		    			world.calculateSkips();
 		    		}
 		    		else if(parser.getName().compareTo("waypoint") == 0){
-		    			GameObject wayPoint = factory.spawnWaypoint(xWay, yWay, widthWay, heightWay, priorityWay, track0, track1, track2, track3);
+		    			GameObject wayPoint = factory.spawnWaypoint(xWay, yWay, widthWay, heightWay, priorityWay, track0, track1);
 		    			root.add(wayPoint);
 		    		}
 		    	}

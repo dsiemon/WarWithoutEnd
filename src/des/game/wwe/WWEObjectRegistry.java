@@ -10,4 +10,5 @@ public class WWEObjectRegistry {
 	public static GameDataSystem gameDataSystem;
 	public static UISystem uiSystem;
 	public static WWEObjectFactory gameObjectFactory;
+	public static GamePreferences preferences;
 }

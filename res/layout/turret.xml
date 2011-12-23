@@ -57,7 +57,7 @@
 <ImageView android:id="@+id/lightTurretIcon" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>
 </TableRow>
 <TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content">
-<ImageView android:id="@+id/lightTurretIconT1" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>
+<ImageView android:id="@+id/autoTurretIcon" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/auto_turret_icon"></ImageView>
 </TableRow>
 <TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content">
 <ImageView android:id="@+id/lightTurretIconT2" android:layout_height="wrap_content" android:layout_marginLeft="10dp" android:layout_width="wrap_content" android:layout_marginBottom="10dp" android:clickable="true" android:src="@drawable/light_turret_icon"></ImageView>

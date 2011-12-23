@@ -15,6 +15,8 @@ public class WWEActivity extends ScaleActivity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	// load preferences first
+    	WWEObjectRegistry.preferences = new GamePreferences();
         super.onCreate(savedInstanceState);
     }
 

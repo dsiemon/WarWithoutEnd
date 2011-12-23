@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<map tileWidth="32" tileHeight="32" widthInTiles="29" heightInTiles="20" background="0" theme="0">
+<map tileWidth="32" tileHeight="32" widthInTiles="29" heightInTiles="20" background="0" theme="0" scrollX=".5" scrollY=".5">
 	<waypoints tracks="2">
 		<waypoint x="256" y="256" width="672" height="128" priority="0">
 			<goalPost x="128" y="212" track="0"/>
 			<goalPost x="128" y="170" track="1"/>
 		</waypoint>
 		<waypoint x="128" y="384" width="128" height="256" priority="1">
-			<goalPost x="212" y="512"  track="0"/>
-			<goalPost x="170" y="512"  track="1"/>
+			<goalPost x="212" y="512"  track="1"/>
+			<goalPost x="170" y="512"  track="0"/>
 		</waypoint>
 		<waypoint x="128" y="512" width="800" height="128" priority="2">
 			<goalPost x="992" y="426"  track="0"/>
-			<goalPost x="992" y="504"  track="1"/>
+			<goalPost x="992" y="468"  track="1"/>
 		</waypoint>
 		<spawn x="912" y="212" track="0"/>
 		<spawn x="912" y="170" track="1"/>

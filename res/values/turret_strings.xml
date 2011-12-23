@@ -4,4 +4,6 @@
 <string name="light_turret_description">A cheep light powered machine gun.</string>
 <string name="destroy_turret_name">Destroy Turret</string>
 <string name="destroy_turret_description">Remove a turret from the map, returns a portion of the cost of the turret.</string>
+<string name="auto_turret_name">Auto Turret</string>
+<string name="auto_turret_description">an auto turret</string>
 </resources>

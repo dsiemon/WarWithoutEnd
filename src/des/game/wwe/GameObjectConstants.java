@@ -22,7 +22,7 @@ public class GameObjectConstants {
 	public static final float SPINDLE_maxSpeed = 100;
 	public static final float SPINDLE_maxAcceleration = 400;
 	public static final int   SPINDLE_armorRating = 0;
-	public static final float SPINDLE_health = 2;
+	public static final float SPINDLE_health = 8;
 	public static final double SPINDLE_MASS = 10;
 	public static final double SPINDLE_RADIUS = 9;
 	public static final int SPINDLE_value = 9;
@@ -37,9 +37,24 @@ public class GameObjectConstants {
 	public static final float   LIGHT_BULLET_explosionRadius = 0;
 	public static final float   LIGHT_BULLET_explosionPower = 0;
 	public static final double  LIGHT_BULLET_MASS = 1;
-	public static final double  LIGHT_BULLET_RADIUS = 2;
+	public static final double  LIGHT_BULLET_RADIUS = 4;
+	public static final float   LIGHT_BULLET_SPEED = 800f;
+	//////////////////////////////////
+	public static final float   AUTO_BULLET_maxLifeTime = 3f;
+	public static final int     AUTO_BULLET_maxCollisions = 2;
+	public static final int     AUTO_BULLET_armorPierceingValue = 0;
+	public static final float   AUTO_BULLET_damageValue = 2;
+	public static final float   AUTO_BULLET_dampenValue = 0;
+	public static final boolean AUTO_BULLET_spawnExplosion = false;
+	public static final float   AUTO_BULLET_explosionRadius = 0;
+	public static final float   AUTO_BULLET_explosionPower = 0;
+	public static final double  AUTO_BULLET_MASS = 1;
+	public static final double  AUTO_BULLET_RADIUS = 4;
+	public static final float   AUTO_BULLET_SPEED = 800f;
 	//Turret constants
 	public static final int     LIGHT_TURRET_value = 9;
+	//////////////////////////////////
+	public static final int     AUTO_TURRET_value = 9;
 	//////////////////////////////////
 	
 }

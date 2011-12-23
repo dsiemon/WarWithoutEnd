@@ -37,8 +37,11 @@ public class UISystem extends BaseObject {
     // turret icons
     private Vector2 inputIconLocation;
     private DrawableBitmap lightTurretIcon;
+    private DrawableBitmap autoTurretIcon;
     private DrawableBitmap removeTurretIcon;
     private DrawableBitmap activeTurretIcon;
+    private DrawableBitmap reloadIcon;
+    private float reloadIconHeight;
     
     // fps
     private int fps;
@@ -155,8 +158,15 @@ public class UISystem extends BaseObject {
 			tex = lightTurretIcon.getTexture();
 			lightTurretIcon.resize(tex.width, tex.height);
 			
+			tex = autoTurretIcon.getTexture();
+			autoTurretIcon.resize(tex.width, tex.height);
+			
 			tex = activeTurretIcon.getTexture();
 			activeTurretIcon.resize(tex.width, tex.height);
+			
+			tex = reloadIcon.getTexture();
+			reloadIcon.resize(tex.width, tex.height);
+			reloadIconHeight = tex.height;
 			
 			ammoLocation.set(tex.width + 10.0f,5.0f);
 		}
@@ -170,6 +180,9 @@ public class UISystem extends BaseObject {
 			if(inputTurretType == TurretComponent.LIGHT_GUN){
 				render.scheduleForDraw(lightTurretIcon, inputIconLocation, SortConstants.HUD + 1, false);
 			}
+			else if(inputTurretType == TurretComponent.AUTO_TURRET){
+				render.scheduleForDraw(autoTurretIcon, inputIconLocation, SortConstants.HUD + 1, false);
+			}
 		}
 		else if(inputMode == TurretSystem.FIRE_INPUT){
 			final int inputTurretType = turretSystem.activeTurret.projectileType;
@@ -177,7 +190,9 @@ public class UISystem extends BaseObject {
 			if(inputTurretType == TurretComponent.LIGHT_GUN){
 				render.scheduleForDraw(lightTurretIcon, inputIconLocation, SortConstants.HUD + 1, false);
 			}
-			
+			else if(inputTurretType == TurretComponent.AUTO_TURRET){
+				render.scheduleForDraw(autoTurretIcon, inputIconLocation, SortConstants.HUD + 1, false);
+			}
 			render.scheduleForDraw(activeTurretIcon, inputIconLocation, SortConstants.HUD + 2, false);
 		}
 		
@@ -193,6 +208,14 @@ public class UISystem extends BaseObject {
 				intToDigitArray(ammo, ammoDigits);
 				ammoChanged = false;
 			} 
+			
+			//draw the reloading icon
+			float reloadPercent = 1 - turretSystem.activeTurret.activeBehavior.percentNextFireTime();
+			if(reloadPercent > 0){
+				reloadIcon.setCrop(0, (int)this.reloadIconHeight, reloadIcon.getWidth(), (int) (reloadPercent * this.reloadIconHeight));
+				reloadIcon.setHeight((int) (reloadPercent * this.reloadIconHeight));
+				render.scheduleForDraw(reloadIcon, ammoLocation, SortConstants.HUD , false);
+			}
 			
 			drawNumber(ammoLocation, ammoDigits, null, 1, 0);
 		}
@@ -343,7 +366,12 @@ public class UISystem extends BaseObject {
 	public void setLightTurretIcon(DrawableBitmap lightTurretIcon) {
 		this.lightTurretIcon = lightTurretIcon;
 	}
-
+	public void setAutoTurretIcon(DrawableBitmap autoTurretIcon) {
+		this.autoTurretIcon = autoTurretIcon;
+	}
+	public void setReloadIcon(DrawableBitmap reloadIcon) {
+		this.reloadIcon = reloadIcon;
+	}
 	public void setRemoveTurretIcon(DrawableBitmap removeTurretIcon) {
 		this.removeTurretIcon = removeTurretIcon;
 	}

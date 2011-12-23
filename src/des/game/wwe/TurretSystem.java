@@ -250,7 +250,7 @@ public class TurretSystem extends BaseObject {
 		if(this.activeTurret != null){
 			this.activeTurret.deactivateTurret();
 		}
-		activeTurret = null;
+		activeTurret = null; 
 		turretInputType = type;
 	}
 	
@@ -265,8 +265,15 @@ public class TurretSystem extends BaseObject {
 			DebugLog.e("turret", "UP: place create");
 			BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnTurretLightGun(locX, locY));
 		}
+		else if(turretInputType == TurretComponent.AUTO_TURRET){
+			DebugLog.e("turret", "UP: place create auto");
+			BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnTurretAutoTurret(locX, locY));
+		}
 	}
 	public void registerTurret(TurretComponent component){
 		turrets.add(component);
+		
+		component.turretBottom = WWEObjectRegistry.gameObjectFactory.spawnTurretBottom((float)component.physicsObject.getLocation().getX(), (float)component.physicsObject.getLocation().getY(), component.activeBehavior.getTurretBottomType());
+		BaseObject.sSystemRegistry.gameObjectManager.add(component.turretBottom);
 	}
 }

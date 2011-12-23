@@ -14,7 +14,7 @@ import des.game.scale.LevelSystem;
 public class WWELevelSystem extends LevelSystem {
 	private final static int LEVEL_1 = 0;
 	
-    public int mWidthInTiles;
+    public int mWidthInTiles; 
     public int mHeightInTiles;
     public int mTileWidth;
     public int mTileHeight;
@@ -26,7 +26,7 @@ public class WWELevelSystem extends LevelSystem {
     private String mCurrentLevel;
     public TiledWorld mapTiles;
     public WWELevelSystem() {
-        super();
+        super(); 
         mWorkspaceBytes = new byte[4];
         reset();
     }
@@ -111,7 +111,7 @@ public class WWELevelSystem extends LevelSystem {
                 builder.buildBackground(
                 		mapInfo.background, 
                 		(int)this.getLevelWidth(),
-                		(int)this.getLevelHeight());
+                		(int)this.getLevelHeight(), mapInfo.scrollX, mapInfo.scrollY);
             root.add(mBackgroundObject);
         }
         

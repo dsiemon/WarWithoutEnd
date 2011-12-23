@@ -70,6 +70,8 @@ public class WWEObjectFactory extends ScaleObjectFactory{
                 new ComponentClass(MobComponent.class, 200),
                 new ComponentClass(TurretComponent.class, 20),
                 new ComponentClass(LightTurretComponent.class, 20),
+                new ComponentClass(AutoCannonTurretComponent.class, 20),
+                
                 new ComponentClass(PhysicsObject.class, 200),
                 new ComponentClass(VectorObject.class, 200),
                 new ComponentClass(Boundary.class, 200),
@@ -94,10 +96,12 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         SPINDLE(6),
         TURRENT_LIGHT_GUN(7),
         LIGHT_BULLET(8),
-        CAMERA_BIAS(56),
+        TURRET_BASIC_BOTTOM(9),
+        CAMERA_BIAS(10),
         
-        FRAMERATE_WATCHER(57),
-        
+        FRAMERATE_WATCHER(11),
+        AUTO_BULLET(12),
+        AUTO_TURRET(13),
         // End
         OBJECT_COUNT(-1);
         
@@ -128,93 +132,46 @@ public class WWEObjectFactory extends ScaleObjectFactory{
     }
 	
 	
-	
-	
-    public void staticDataBouncyBall(){
-        final int staticObjectCount = 1;
-        FixedSizeArray<BaseObject> staticData = new FixedSizeArray<BaseObject>(staticObjectCount);
-
-        SpriteAnimation idle = new SpriteAnimation(0, 5);
-        idle.addFrame(new AnimationFrame(
-                DrawableBufferedTexureCoords.getTexture("spindle_1"), 
-                2.0f));
-        idle.addFrame(new AnimationFrame(
-        		DrawableBufferedTexureCoords.getTexture("spindle_1"), 
-                Utils.framesToTime(24, 2)));
-        idle.addFrame(new AnimationFrame(
-        		DrawableBufferedTexureCoords.getTexture("spindle_1"), 
-                Utils.framesToTime(24, 1)));
-        idle.addFrame(new AnimationFrame(
-        		DrawableBufferedTexureCoords.getTexture("spindle_1"), 
-                Utils.framesToTime(24, 1)));
-        idle.addFrame(new AnimationFrame(
-        		DrawableBufferedTexureCoords.getTexture("spindle_1"), 
-                Utils.framesToTime(24, 2)));
-        idle.setLoop(true);
-
-        
-        staticData.add(idle);
-        setStaticData(GameObjectType.BOUNCYBALL.ordinal(), staticData);
-    }
-	public GameObject spawnBouncyBall(float positionX, float positionY, boolean flipHorizontal){
-        TextureLibrary textureLibrary = sSystemRegistry.shortTermTextureLibrary;
-        GameObject object = mGameObjectPool.allocate();
-        object.getPosition().set(positionX, positionY);
-
-        object.width = 32;
-        object.height = 32;
-        
-        FixedSizeArray<BaseObject> staticData = getStaticData(GameObjectType.BOUNCYBALL.ordinal());
-        if (staticData == null) {
-        	staticDataBouncyBall();
-        }
-        
-        RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
-        render.setPriority(SortConstants.BUFFERED_START);
-        render.setDrawOffset(-16, -16);
-        SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
-        sprite.setSize((int)object.width, (int)object.height);
-        sprite.setRotatable(true);
-        sprite.setRenderComponent(render);
- 
-        GenericAnimationComponent animation 
-            = (GenericAnimationComponent)allocateComponent(GenericAnimationComponent.class);
-        animation.setSprite(sprite);
- 
-        object.add(render);
-        object.add(sprite);
-    
-        object.add(animation);
-        object.setCurrentAction(GenericAnimationComponent.Animation.IDLE);
-        
-        PhysicsObject physics = (PhysicsObject)allocateComponent(PhysicsObject.class);
-        physics.location.setX(positionX);
-        physics.location.setY(positionY);
-        physics.location.setZ(0);
-        
-        VectorObject vector = (VectorObject)allocateComponent(VectorObject.class);
-        vector.initialize(1, physics.location, 0, 0);
-        physics.vector = vector;
-        
-        Circle circle = (Circle)allocateComponent(Circle.class);
-        circle.initialize(physics.location, 16);
-        Boundary boundary = (Boundary)allocateComponent(Boundary.class);
-        boundary.setCircle(circle);
-        
-        physics.boundary = boundary;
-        physics.type = PhysicsObject.MISC;
-        object.physcisObject = physics;
-        object.physcisObject.add();
-        CollisionComponent collision = (CollisionComponent)allocateComponent(CollisionComponent.class);
-        collision.setPhysicsObject(object.physcisObject);
-        object.add(collision);
-        object.attributes = (GameObjectAttributes)allocateComponent(GameObjectAttributes.class);   
-        addStaticData(GameObjectType.BOUNCYBALL.ordinal(), object, sprite);
-        
-        sprite.playAnimation(0);
-        object.commitUpdates();
-        return object;
+	public GameObject spawnMob(float positionX, float positionY, int track, GameObjectType type){
+		GameObject object = null;
+		
+		switch(type){
+		case SPINDLE:
+			object = this.spawnSpindle(positionX, positionY, track);
+			break;
+			default:
+				assert(false);
+		}
+		return object;
 	}
+	public GameObject spawnProjectile(float positionX, float positionY, float orientation, float timeToTarget, GameObjectType type){
+		GameObject object = null;
+		
+		switch(type){
+		case LIGHT_BULLET:
+			object = this.spawnLightBullet(positionX, positionY, orientation);
+			break;
+		case AUTO_BULLET:
+			object = this.spawnAutoBullet(positionX, positionY, orientation,timeToTarget);
+			break;
+			default:
+				assert(false);
+		}
+		return object;
+	}
+	public GameObject spawnTurretBottom(float positionX, float positionY, GameObjectType type){
+		GameObject object = null;
+		
+		switch(type){
+		case TURRET_BASIC_BOTTOM:
+			object = this.spawnTurretBasicBottom(positionX, positionY);
+			break;
+			default:
+				assert(false);
+		}
+		return object;
+	}
+
     public void staticDataSpindle(){
         final int staticObjectCount = 1; 
         FixedSizeArray<BaseObject> staticData = new FixedSizeArray<BaseObject>(staticObjectCount);
@@ -239,7 +196,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         staticData.add(idle);
         setStaticData(GameObjectType.SPINDLE.ordinal(), staticData);
     }
-	public GameObject spawnSpindle(float positionX, float positionY, boolean flipHorizontal){
+	public GameObject spawnSpindle(float positionX, float positionY, int track){
         TextureLibrary textureLibrary = sSystemRegistry.shortTermTextureLibrary;
         GameObject object = mGameObjectPool.allocate();
         object.getPosition().set(positionX, positionY);
@@ -289,6 +246,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         object.physcisObject = physics;
         object.physcisObject.add();
         MobComponent collision = (MobComponent)allocateComponent(MobComponent.class);
+        collision.waypointTrack = track;
         collision.maxAcceleration = GameObjectConstants.SPINDLE_maxAcceleration;
         collision.maxSpeed = GameObjectConstants.SPINDLE_maxSpeed;
         collision.armorRating = GameObjectConstants.SPINDLE_armorRating;
@@ -313,7 +271,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
 
         setStaticData(GameObjectType.WAYPOINT.ordinal(), staticData);
     }
-	public GameObject spawnWaypoint(float positionX, float positionY, float width, float height,int priority, WaypointGoalPost track0, WaypointGoalPost track1, WaypointGoalPost track2, WaypointGoalPost track3){
+	public GameObject spawnWaypoint(float positionX, float positionY, float width, float height,int priority, WaypointGoalPost track0, WaypointGoalPost track1){
 
         GameObject object = mGameObjectPool.allocate();
         object.getPosition().set(positionX, positionY);
@@ -344,8 +302,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         collision.priority = priority;
         collision.track0 = track0;
         collision.track1 = track1;
-        collision.track2 = track2;
-        collision.track3 = track3;
+
         
         
         object.add(collision);
@@ -478,7 +435,62 @@ public class WWEObjectFactory extends ScaleObjectFactory{
 
         return object;
     }
+    public void staticDataTurretBasicBottom(){
+
+        final int staticObjectCount = 1;
+        FixedSizeArray<BaseObject> staticData = new FixedSizeArray<BaseObject>(staticObjectCount);
+
+        SpriteAnimation idle = new SpriteAnimation(0, 1);
+        idle.addFrame(new AnimationFrame(                
+        		DrawableBufferedTexureCoords.getTexture("turret_basic_bottom"), 
+                Utils.framesToTime(24, 4)));
+
+        idle.setLoop(true);
+
+
+
+        
+        staticData.add(idle);
+
+        setStaticData(GameObjectType.TURRET_BASIC_BOTTOM.ordinal(), staticData);
+    }
+    public GameObject spawnTurretBasicBottom(float positionX, float positionY){
+    	GameObject object = mGameObjectPool.allocate();
+        object.getPosition().set(positionX, positionY);
+
+        object.width = 64;
+        object.height = 64;
+        
+
+        FixedSizeArray<BaseObject> staticData = getStaticData(GameObjectType.TURRET_BASIC_BOTTOM.ordinal());
+        if (staticData == null) {
+        	staticDataTurretBasicBottom();
+        }
+        RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
+        render.setPriority(SortConstants.BUFFERED_START);
+        render.setDrawOffset(-32, -32);
+        SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
+        sprite.setSize((int)object.width, (int)object.height);
+        sprite.setRotatable(false);
+        sprite.setRenderComponent(render);
+ 
+        GenericAnimationComponent animation 
+            = (GenericAnimationComponent)allocateComponent(GenericAnimationComponent.class);
+        animation.setSprite(sprite);
+        object.attributes = (GameObjectAttributes)allocateComponent(GameObjectAttributes.class);   
+ 
+        object.add(render);
+        object.add(sprite);
     
+        object.add(animation);
+        object.setCurrentAction(GenericAnimationComponent.Animation.IDLE);
+        
+        addStaticData(GameObjectType.TURRET_BASIC_BOTTOM.ordinal(), object, sprite);
+        
+        sprite.playAnimation(0);
+        object.commitUpdates();
+        return object;
+    }
     public void staticDataTurretLightGun(){
 
         final int staticObjectCount = 2;
@@ -516,7 +528,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         }
         
         RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
-        render.setPriority(SortConstants.BUFFERED_START);
+        render.setPriority(SortConstants.BUFFERED_START + 1);
         render.setDrawOffset(-32, -32);
         SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
         sprite.setSize((int)object.width, (int)object.height);
@@ -556,7 +568,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         object.add(collision.activeBehavior);
         collision.projectileType = TurretComponent.LIGHT_GUN;
         collision.turretValue = GameObjectConstants.LIGHT_TURRET_value;
-        
+        collision.turretRadius = LightTurretComponent.RADIUS;
 		LevelSystem levelSystem = BaseObject.sSystemRegistry.levelSystem;
 		int tileX = (int)positionX/levelSystem.getTileWidth();
 		int tileY = (int)positionY/levelSystem.getTileHeight();
@@ -571,7 +583,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         collision.turretXIndex = tileX;
         collision.turretYIndex = tileY;
         
-        WWEObjectRegistry.turretSystem.registerTurret(collision);
+        
         object.add(collision);
         object.attributes = (GameObjectAttributes)allocateComponent(GameObjectAttributes.class);   
  
@@ -580,6 +592,8 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         
         sprite.playAnimation(0);
         object.commitUpdates();
+        
+        WWEObjectRegistry.turretSystem.registerTurret(collision);
         return object;
 	}
 	
@@ -612,7 +626,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
 	    }
 	    
 	    RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
-	    render.setPriority(SortConstants.BUFFERED_START+1);
+	    render.setPriority(SortConstants.BUFFERED_START+2);
 	    render.setDrawOffset(-4, -4);
 	    SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
 	    sprite.setSize((int)object.width, (int)object.height);
@@ -636,11 +650,11 @@ public class WWEObjectFactory extends ScaleObjectFactory{
 
 	    VectorObject vector = (VectorObject)allocateComponent(VectorObject.class);
 	    vector.initialize(GameObjectConstants.LIGHT_BULLET_MASS, physics.location, 0, 0);
-	    vector.setVelocityMagDir(800, orientation);
+	    vector.setVelocityMagDir(GameObjectConstants.LIGHT_BULLET_SPEED, orientation);
 	    physics.vector = vector;
 	    
 	    Circle circle = (Circle)allocateComponent(Circle.class);
-	    circle.initialize(physics.location, 4/*GameObjectConstants.LIGHT_BULLET_RADIUS*/);
+	    circle.initialize(physics.location, GameObjectConstants.LIGHT_BULLET_RADIUS);
 	    Boundary boundary = (Boundary)allocateComponent(Boundary.class);
 	    boundary.setCircle(circle);
 	    
@@ -665,9 +679,201 @@ public class WWEObjectFactory extends ScaleObjectFactory{
 	    object.commitUpdates();
 	    return object;
 	}
+	public void staticDataAutoBullet(){
+	    final int staticObjectCount = 1; 
+	    FixedSizeArray<BaseObject> staticData = new FixedSizeArray<BaseObject>(staticObjectCount);
+	
+	    SpriteAnimation idle = new SpriteAnimation(0, 1);
+	    idle.addFrame(new AnimationFrame(
+	    		DrawableBufferedTexureCoords.getTexture("auto_bullet"), 
+	            Utils.framesToTime(24, 2)));
+	
+	
+	    idle.setLoop(true);
+	
+	    
+	    staticData.add(idle);
+	    setStaticData(GameObjectType.AUTO_BULLET.ordinal(), staticData);
+	}
+	public GameObject spawnAutoBullet(float positionX, float positionY, float orientation, float fuse){
+	    GameObject object = mGameObjectPool.allocate();
+	    object.getPosition().set(positionX, positionY);
+	
+	    object.width = 8;
+	    object.height = 8;
+	    
+	    FixedSizeArray<BaseObject> staticData = getStaticData(GameObjectType.AUTO_BULLET.ordinal());
+	    if (staticData == null) {
+	    	staticDataAutoBullet();
+	    }
+	    
+	    RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
+	    render.setPriority(SortConstants.BUFFERED_START+2);
+	    render.setDrawOffset(-4, -4);
+	    SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
+	    sprite.setSize((int)object.width, (int)object.height);
+	    sprite.setRotatable(true); 
+	    sprite.setRenderComponent(render);
+	
+	    GenericAnimationComponent animation 
+	        = (GenericAnimationComponent)allocateComponent(GenericAnimationComponent.class);
+	    animation.setSprite(sprite);
+	
+	    object.add(render);
+	    object.add(sprite);
+	
+	    object.add(animation);
+	    object.setCurrentAction(GenericAnimationComponent.Animation.IDLE);
+	    
+	    PhysicsObject physics = (PhysicsObject)allocateComponent(PhysicsObject.class);
+	    physics.location.setX(positionX);
+	    physics.location.setY(positionY);
+	    physics.location.setZ(0);
 
+	    VectorObject vector = (VectorObject)allocateComponent(VectorObject.class);
+	    vector.initialize(GameObjectConstants.AUTO_BULLET_MASS, physics.location, 0, 0);
+	    vector.setVelocityMagDir(GameObjectConstants.AUTO_BULLET_SPEED, orientation);
+	    physics.vector = vector;
+	    
+	    Circle circle = (Circle)allocateComponent(Circle.class);
+	    circle.initialize(physics.location, GameObjectConstants.AUTO_BULLET_RADIUS);
+	    Boundary boundary = (Boundary)allocateComponent(Boundary.class);
+	    boundary.setCircle(circle);
+	    
+	    physics.boundary = boundary;
+	    physics.type = PhysicsObject.PROJECTILE;
+	    object.physcisObject = physics;
+	    object.physcisObject.add();
+	    ProjectileComponent collision = (ProjectileComponent)allocateComponent(ProjectileComponent.class);
+	    collision.armorPierceingValue = GameObjectConstants.AUTO_BULLET_armorPierceingValue;
+	    collision.damageValue = GameObjectConstants.AUTO_BULLET_damageValue;
+	    collision.dampenValue = GameObjectConstants.AUTO_BULLET_dampenValue;
+	    collision.maxCollisions = GameObjectConstants.AUTO_BULLET_maxCollisions;
+	    collision.maxLifeTime = GameObjectConstants.AUTO_BULLET_maxLifeTime;
+	    collision.spawnExplosion = GameObjectConstants.AUTO_BULLET_spawnExplosion;
+	    
+	    collision.setPhysicsObject(object.physcisObject);
+	    object.add(collision);
+	    object.attributes = (GameObjectAttributes)allocateComponent(GameObjectAttributes.class);   
+	    addStaticData(GameObjectType.AUTO_BULLET.ordinal(), object, sprite);
+	    
+	    sprite.playAnimation(0);
+	    object.commitUpdates();
+	    return object;
+	}
 
+    public void staticDataTurretAutoTurret(){
 
+        final int staticObjectCount = 2;
+        FixedSizeArray<BaseObject> staticData = new FixedSizeArray<BaseObject>(staticObjectCount);
+
+        SpriteAnimation idle = new SpriteAnimation(0, 3);
+        idle.addFrame(new AnimationFrame(                
+        		DrawableBufferedTexureCoords.getTexture("turret_auto_cannon_1"), 
+                Utils.framesToTime(24, 2)));
+        idle.addFrame(new AnimationFrame(                
+        		DrawableBufferedTexureCoords.getTexture("turret_auto_cannon_2"), 
+                Utils.framesToTime(24, 2)));
+        idle.addFrame(new AnimationFrame(                
+        		DrawableBufferedTexureCoords.getTexture("turret_auto_cannon_3"), 
+                Utils.framesToTime(24, 2)));
+        idle.setLoop(true);
+
+        SpriteAnimation attack = new SpriteAnimation(2, 2);
+        attack.addFrame(new AnimationFrame(
+        		DrawableBufferedTexureCoords.getTexture("turret_auto_cannon_attack_1"), 
+                Utils.framesToTime(24, 1)));
+        attack.addFrame(new AnimationFrame(
+        		DrawableBufferedTexureCoords.getTexture("turret_auto_cannon_attack_2"), 
+                Utils.framesToTime(24, 1)));
+        
+        staticData.add(idle);
+        staticData.add(attack);
+        setStaticData(GameObjectType.AUTO_TURRET.ordinal(), staticData);
+    }
+	public GameObject spawnTurretAutoTurret(float positionX, float positionY){
+
+        GameObject object = mGameObjectPool.allocate();
+        object.getPosition().set(positionX, positionY);
+
+        object.width = 64;
+        object.height = 64;
+        
+
+        FixedSizeArray<BaseObject> staticData = getStaticData(GameObjectType.AUTO_TURRET.ordinal());
+        if (staticData == null) {
+        	staticDataTurretAutoTurret();
+        }
+        
+        RenderComponent render = (RenderComponent)allocateComponent(RenderComponent.class);
+        render.setPriority(SortConstants.BUFFERED_START + 1);
+        render.setDrawOffset(-32, -32);
+        SpriteComponent sprite = (SpriteComponent)allocateComponent(SpriteComponent.class);
+        sprite.setSize((int)object.width, (int)object.height);
+        sprite.setRotatable(true);
+        sprite.setRenderComponent(render);
+ 
+        GenericAnimationComponent animation 
+            = (GenericAnimationComponent)allocateComponent(GenericAnimationComponent.class);
+        animation.setSprite(sprite);
+        
+        object.add(render);
+        object.add(sprite);
+    
+        object.add(animation);
+        object.setCurrentAction(GenericAnimationComponent.Animation.IDLE);
+         
+        PhysicsObject physics = (PhysicsObject)allocateComponent(PhysicsObject.class);
+        physics.location.setX(positionX);
+        physics.location.setY(positionY);
+        physics.location.setZ(0);
+        physics.type = PhysicsObject.PASSIVE_TYPE;
+        
+        Circle circle = (Circle)allocateComponent(Circle.class);
+        circle.initialize(physics.location, 150);
+        Boundary boundary = (Boundary)allocateComponent(Boundary.class);
+        boundary.setCircle(circle);
+        
+        physics.boundary = boundary;
+
+        object.physcisObject = physics;
+        object.physcisObject.add();
+        TurretComponent collision = (TurretComponent)allocateComponent(TurretComponent.class);
+        collision.setPhysicsObject(object.physcisObject);
+        collision.inactiveFireRate = 4f;
+        collision.active = false;
+        collision.activeBehavior = (AutoCannonTurretComponent)allocateComponent(AutoCannonTurretComponent.class);
+        object.add(collision.activeBehavior);
+        collision.projectileType = TurretComponent.AUTO_TURRET;
+        collision.turretValue = GameObjectConstants.AUTO_TURRET_value;
+        collision.turretRadius = AutoCannonTurretComponent.RADIUS;
+		LevelSystem levelSystem = BaseObject.sSystemRegistry.levelSystem;
+		int tileX = (int)positionX/levelSystem.getTileWidth();
+		int tileY = (int)positionY/levelSystem.getTileHeight();
+		
+		if(tileX%2 == 1){
+			tileX--;
+		}
+		if(tileY%2 == 1){
+			tileY--;
+		}
+		
+        collision.turretXIndex = tileX;
+        collision.turretYIndex = tileY;
+        
+        
+        object.add(collision);
+        object.attributes = (GameObjectAttributes)allocateComponent(GameObjectAttributes.class);   
+ 
+        
+        addStaticData(GameObjectType.AUTO_TURRET.ordinal(), object, sprite);
+        
+        sprite.playAnimation(0);
+        object.commitUpdates();
+        
+        WWEObjectRegistry.turretSystem.registerTurret(collision);
+        return object;
+	}
 
 
 	@Override
