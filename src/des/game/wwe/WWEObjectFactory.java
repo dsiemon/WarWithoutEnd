@@ -2,15 +2,18 @@ package des.game.wwe;
 
 import des.game.base.BaseObject;
 import des.game.base.CollisionComponent;
+import des.game.base.FieldComponent;
 import des.game.base.FixedSizeArray;
 import des.game.base.GameObject;
 import des.game.base.GameObjectAttributes;
 import des.game.base.Utils;
 import des.game.boundary.Boundary;
 import des.game.boundary.Circle;
+import des.game.boundary.Polygon;
 import des.game.boundary.Rectangle;
 import des.game.drawing.DrawableBufferedTexureCoords;
 import des.game.drawing.TextureLibrary;
+import des.game.physics.Field;
 import des.game.physics.PhysicsObject;
 import des.game.physics.VectorObject;
 import des.game.scale.AnimationFrame;
@@ -77,6 +80,10 @@ public class WWEObjectFactory extends ScaleObjectFactory{
                 new ComponentClass(Boundary.class, 200),
                 new ComponentClass(Circle.class, 200),
                 new ComponentClass(Rectangle.class, 200),
+                new ComponentClass(Field.class, 100),
+                new ComponentClass(FieldComponent.class, 100),
+                new ComponentClass(Rectangle.class, 200),
+                new ComponentClass(Polygon.class, 20),
         };
         
         this.setupComponentPools(componentTypes);

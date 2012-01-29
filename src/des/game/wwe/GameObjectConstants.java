@@ -22,7 +22,7 @@ public class GameObjectConstants {
 	public static final float SPINDLE_maxSpeed = 100;
 	public static final float SPINDLE_maxAcceleration = 400;
 	public static final int   SPINDLE_armorRating = 0;
-	public static final float SPINDLE_health = 8;
+	public static final float SPINDLE_health = 2;
 	public static final double SPINDLE_MASS = 10;
 	public static final double SPINDLE_RADIUS = 9;
 	public static final int SPINDLE_value = 9;
