@@ -20,7 +20,9 @@ import des.game.base.CollisionComponent;
 import des.game.base.GameObject;
 import des.game.base.Vector2;
 import des.game.physics.CollisionBehavior;
+import des.game.physics.ControlledVectorObject;
 import des.game.physics.PhysicsObject;
+import des.game.physics.VectorObject;
 import des.game.physics.Velocity;
 import des.game.scale.ScaleObjectFactory;
 
@@ -28,7 +30,7 @@ public class MobComponent extends CollisionComponent {
 	public static final float NO_CHANGE_TOLERANCE = 4f;
 	public static final float MAX_DISTANCE_TOLERANCE = 12f;
 
-	
+	public ControlledVectorObject vector;
 	// path finding
 	public int waypointTrack;
 	public int waypointPriority;
@@ -107,6 +109,7 @@ public class MobComponent extends CollisionComponent {
 		
 		type = null;
 		value = 0;
+		this.vector = null;
 		super.reset();
 	}
 	
@@ -121,6 +124,8 @@ public class MobComponent extends CollisionComponent {
 			BaseObject.sSystemRegistry.gameObjectManager.destroy(gameObject);
 		}
 		else{
+			// brake the controlled vecotr
+			this.vector.brakeVector(timeDelta);
 			
 			if(this.lastPriority >= 0 && this.lastPriority != this.waypointPriority){
 				changeDirection = true;
@@ -133,10 +138,10 @@ public class MobComponent extends CollisionComponent {
 	    	position.y = (float)this.physicsObject.getLocation().getY();
 	    	
 	    	if(this.physicsObject.getVector() != null){
-		    	final Velocity v = this.physicsObject.getVector().getVelocity();
+
 		    	final Vector2 velocity = gameObject.velocity;
-		    	velocity.x = (float)v.getXComponent();
-		    	velocity.y = (float)v.getYComponent();
+		    	velocity.x = (float)vector.getUncontrolledX();
+		    	velocity.y = (float)vector.getUncontrolledY();
 		    	
 		    	// modify the goal direction, if we changed directions recently
 		    	if(changeDirection){
@@ -173,21 +178,37 @@ public class MobComponent extends CollisionComponent {
 			    		this.changeDirection = false;
 			    	}
 		    	}
+		    	// this is the ideal direction for the mob
 		    	waypointGoal.normalize();
-		    	waypointGoal.multiply(maxSpeed);
 		    	
-		    	waypointGoal.subtract(velocity);
-		    	final float maxVel = maxAcceleration*timeDelta;
-		    	final float vel = waypointGoal.magnitude();
-		    	if(maxVel < vel){
-		    		waypointGoal.normalize();
-			    	waypointGoal.multiply(maxAcceleration);
+		    	
+		    	if(velocity.x != 0 || velocity.y != 0){
+		    		float uTheta = velocity.orientation();
+		    		float cTheta = waypointGoal.orientation();
+			    	float dTheta = uTheta - cTheta;
+			    	if(dTheta != 0){
+			    		waypointGoal.x = (float)Math.cos(dTheta);
+			    		if(waypointGoal.x < 0){
+			    			waypointGoal.x*=-1;
+			    		}
+			    		waypointGoal.y = (float)Math.sin(dTheta)*-1;
+			    		
+			    		cTheta += waypointGoal.orientation();
+			    		waypointGoal.x = (float)Math.cos(cTheta);
+			    		waypointGoal.y = (float)Math.sin(cTheta);
+			    	}
 		    	}
 		    	
-		    	v.setAccelerationXComponent(waypointGoal.x);
-		    	v.setAccelerationYComponent(waypointGoal.y);
-		    	//DebugLog.e("mob", "ax " + waypointGoal.x + ", ay " + waypointGoal.y);
+		    	waypointGoal.multiply(maxSpeed);
 		    	gameObject.targetVelocity.set(waypointGoal);
+//		    	waypointGoal.subtract(velocity);
+//		    	waypointGoal.normalize();
+//		    	waypointGoal.multiply(maxSpeed);
+		    	
+		    	
+		    	vector.setControlledComponents(waypointGoal.x, waypointGoal.y);
+		    	//DebugLog.e("mob", "ax " + waypointGoal.x + ", ay " + waypointGoal.y);
+		    	
 
 	    	}
 		}
@@ -242,4 +263,88 @@ public class MobComponent extends CollisionComponent {
 
 	    	}
 		}
+*/
+
+/*old path finding
+
+final GameObject gameObject = (GameObject)parent;
+if(goalReached || health <= 0){
+	if(!goalReached){
+		WWEObjectRegistry.mobSystem.mobKilled(this);
+	}
+	BaseObject.sSystemRegistry.gameObjectManager.destroy(gameObject);
+}
+else{
+	// brake the controlled vecotr
+	this.vector.brakeVector(timeDelta);
+	
+	if(this.lastPriority >= 0 && this.lastPriority != this.waypointPriority){
+		changeDirection = true;
+	}
+		
+	this.lastPriority = this.waypointPriority;
+	this.waypointPriority = -1;
+	Vector2 position = gameObject.getPosition();
+	position.x = (float)this.physicsObject.getLocation().getX();
+	position.y = (float)this.physicsObject.getLocation().getY();
+	
+	if(this.physicsObject.getVector() != null){
+    	final VectorObject v = this.physicsObject.getVector();
+    	final Vector2 velocity = gameObject.velocity;
+    	velocity.x = (float)v.getVelocityXComponent();
+    	velocity.y = (float)v.getVelocityYComponent();
+    	
+    	// modify the goal direction, if we changed directions recently
+    	if(changeDirection){
+	    	float minDist = Math.abs(waypointGoal.x);
+	    	boolean isX = true;
+	    	
+	    	if(minDist > Math.abs(waypointGoal.y)){
+	    		isX = false;
+	    		minDist = waypointGoal.y;
+	    	}
+	    	
+	    	// are we out of the line too much?
+	    	if(Math.abs(minDist) > MAX_DISTANCE_TOLERANCE){
+	    		
+	    		if(isX){
+	    			if(waypointGoal.y < 0){
+	    				waypointGoal.y = - MAX_DISTANCE_TOLERANCE/2;
+	    			}
+	    			else{
+	    				waypointGoal.y =  MAX_DISTANCE_TOLERANCE/2;
+	    			}
+	    		}
+	    		else{
+	    			if(waypointGoal.x < 0){
+	    				waypointGoal.x = - MAX_DISTANCE_TOLERANCE/2;
+	    			}
+	    			else{
+	    				waypointGoal.x =  MAX_DISTANCE_TOLERANCE/2;
+	    			}
+	    		}
+	    	}
+	    	//if not then end the direction change
+	    	else{
+	    		this.changeDirection = false;
+	    	}
+    	}
+    	waypointGoal.normalize();
+    	waypointGoal.multiply(maxSpeed);
+    	
+    	waypointGoal.subtract(velocity);
+    	final float maxVel = maxAcceleration*timeDelta;
+    	final float vel = waypointGoal.magnitude();
+    	if(maxVel < vel){
+    		waypointGoal.normalize();
+	    	waypointGoal.multiply(maxAcceleration);
+    	}
+    	
+    	v.setAccelerationXComponent(waypointGoal.x);
+    	v.setAccelerationYComponent(waypointGoal.y);
+    	//DebugLog.e("mob", "ax " + waypointGoal.x + ", ay " + waypointGoal.y);
+    	gameObject.targetVelocity.set(waypointGoal);
+
+	}
+}
 */

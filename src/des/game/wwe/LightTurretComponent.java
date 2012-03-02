@@ -91,8 +91,8 @@ public class LightTurretComponent extends ActiveTurretComponent {
 				DebugLog.e("turret", "bullets fired!");
 				gameObject.setCurrentAction(GenericAnimationComponent.Animation.ATTACK);
 				final float orientation = targetAngle.orientation();
-
-				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.buildObject(WWEObjectFactory.GameObjectType.LIGHT_BULLET,(float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, GameObjectConstants.LIGHT_BULLET_SPEED,0));
+				//BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
 			}
 		}
 	}
@@ -125,7 +125,9 @@ public class LightTurretComponent extends ActiveTurretComponent {
 	
 	@Override
 	public void passiveAttack(float positionX, float positionY, float orientation, float timeToTarget){
-		BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile(positionX, positionY, orientation,timeToTarget,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
+		BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.buildObject(WWEObjectFactory.GameObjectType.LIGHT_BULLET,(float)Math.cos(orientation)*RADIUS + positionX, (float)Math.sin(orientation)*RADIUS + positionY, orientation, GameObjectConstants.LIGHT_BULLET_SPEED,0));
+
+		//BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile(positionX, positionY, orientation,timeToTarget,WWEObjectFactory.GameObjectType.LIGHT_BULLET));
 	}
 	
 	@Override

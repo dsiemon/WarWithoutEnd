@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<GameObjects>
+	<GameObject type="LIGHT_BULLET">
+		<Attribute name="width" value="8.0"/>
+		<Attribute name="height" value="8.0"/>
+		<Attribute name="currentAction" value="0"/>
+		<Attribute name="physicsObjectIndex" value="0"/>
+		<Attribute name="spriteObjectIndex" value="7"/>
+		
+		<StaticData count="1">
+			<Animation id="0" count="1" loop="true">
+				<Frame texture="light_bullet1" frameCount="2" />
+			</Animation>
+		</StaticData>
+		
+		<Components>
+			<Component type="des.game.physics.PhysicsObject" >
+				<Field name="type" value="4"/>
+				<Dependency method="setVector" childIndex="1" paramType="des.game.physics.VectorObject"/>
+				<Dependency method="setBoundary" childIndex="2" paramType="des.game.boundary.Boundary"/>
+
+			</Component>
+			<Component type="des.game.physics.VectorObject" >
+				<Field name="mass" value="1.5"/>
+			</Component>
+			<Component type="des.game.boundary.Boundary">
+				<Dependency method="setCircle" childIndex="3" paramType="des.game.boundary.Circle"/>
+			</Component>
+			<Component type="des.game.boundary.Circle" >
+				<Method type="float" name="setRadius" arg="4.0" />
+			</Component>
+			<Component type="des.game.wwe.ProjectileComponent" >
+				<Field name="maxLifeTime" value="3.0"/>
+				<Field name="maxCollisions" value="4"/>
+				<Field name="armorPierceingValue" value="0"/>
+				<Field name="damageValue" value="1.0"/>
+				<Field name="dampenValue" value="0.0"/>
+				<Field name="spawnExplosion" value="false"/>
+				<Dependency method="setPhysicsObject" childIndex="0" paramType="des.game.physics.PhysicsObject"/>
+			</Component>
+			
+			<Component type="des.game.scale.GenericAnimationComponent" field="animation" >
+				<Dependency method="setSprite" childIndex="7" paramType="des.game.scale.SpriteComponent"/>
+			</Component>
+			<Component type="des.game.scale.RenderComponent" field="animation" >
+				<Method type="int" name="setPriority" arg="2" />
+				<Method type="float2" name="setDrawOffset" arg0="-4.0" arg1="-4.0"/>
+			</Component>
+			<Component type="des.game.scale.SpriteComponent" field="animation" >
+				<Method type="int2" name="setSize" arg0="8" arg1="8" />
+				<Method type="boolean" name="setRotatable" arg="false"  />
+				<Method type="int" name="playAnimation" arg="0" />
+				<Dependency method="setRenderComponent" childIndex="6" paramType="des.game.scale.RenderComponent"/>
+			</Component>
+		</Components>
+
+
+	</GameObject>
+</GameObjects>

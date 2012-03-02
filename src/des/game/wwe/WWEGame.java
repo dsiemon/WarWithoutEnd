@@ -32,6 +32,8 @@ public class WWEGame extends Game {
         BaseObject.sSystemRegistry.drawableBuffer.add(new DrawableBuffer(BaseObject.sSystemRegistry.shortTermTextureLibrary.allocateTexture(R.drawable.sprite_sheet),-1,101));
         DrawableBufferedTexureCoords.loadTextureCoords(params.context.getResources().getXml(R.xml.sprite_sheet));
         
+        WWEObjectRegistry.gameObjectFactory.loadObjectDefinitions(this.mContextParameters.context.getResources().getXml(R.xml.definitions));
+        
         ObjectManager<BaseObject> gameRoot = this.mGameRoot;
         LevelManager levelManager = new LevelManager();
         WWEObjectRegistry.levelManager = levelManager;
@@ -118,6 +120,7 @@ public class WWEGame extends Game {
 	protected ScaleObjectFactory createObjectFactory() {
 		WWEObjectFactory objectFactory = new WWEObjectFactory();
 		WWEObjectRegistry.gameObjectFactory = objectFactory;
+		
 		return objectFactory;
 	}
 }

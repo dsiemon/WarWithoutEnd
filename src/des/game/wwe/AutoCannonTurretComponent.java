@@ -79,7 +79,7 @@ public class AutoCannonTurretComponent extends ActiveTurretComponent {
 				gameObject.setCurrentAction(GenericAnimationComponent.Animation.ATTACK);
 				final float orientation = targetAngle.orientation();
 				burstCount = 1;
-				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.AUTO_BULLET));
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.WAVE_BULLET));
 			}
 			else if(burstCount != 0 && lastFireTime >= BURST_RATE){
 				lastFireTime = 0;
@@ -87,7 +87,7 @@ public class AutoCannonTurretComponent extends ActiveTurretComponent {
 				gameObject.setCurrentAction(GenericAnimationComponent.Animation.ATTACK);
 				final float orientation = targetAngle.orientation();
 				burstCount++;
-				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.AUTO_BULLET));
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.spawnProjectile((float)Math.cos(orientation)*RADIUS + location.x, (float)Math.sin(orientation)*RADIUS + location.y, orientation, 0,WWEObjectFactory.GameObjectType.WAVE_BULLET));
 				if(burstCount >= BURST_COUNT){
 					burstCount = 0;
 				}
@@ -134,7 +134,7 @@ public class AutoCannonTurretComponent extends ActiveTurretComponent {
 	}
 	@Override
 	public float percentNextFireTime(){
-		float rtn = this.lastFireTime/this.FIRE_RATE;
+		float rtn = this.lastFireTime/AutoCannonTurretComponent.FIRE_RATE;
 		if(this.burstCount != 0){
 			rtn = 0;
 		}

@@ -28,7 +28,7 @@ public class GoalComponent extends CollisionComponent {
 
 		
 		this.reset();
-		super.setPhase(GameComponent.ComponentPhases.PHYSICS.ordinal());
+		super.setPhase(GameComponent.ComponentPhases.POST_PHYSICS.ordinal());
 	}
 	public GoalComponent(PhysicsObject physicsObject){
 		super(physicsObject);
@@ -36,7 +36,7 @@ public class GoalComponent extends CollisionComponent {
 
 		
 		this.reset();
-		super.setPhase(GameComponent.ComponentPhases.PHYSICS.ordinal());
+		super.setPhase(GameComponent.ComponentPhases.POST_PHYSICS.ordinal());
 		
 		this.setPhysicsObject(physicsObject);
 	}

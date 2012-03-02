@@ -17,13 +17,13 @@ package des.game.wwe;
 
 import des.game.base.BaseObject;
 import des.game.base.GameComponent;
-import des.game.wwe.WWEObjectFactory.GameObjectType;
+
 
 public class ActiveTurretComponent extends GameComponent {
 	
 	public ActiveTurretComponent(){
 		super();
-		super.setPhase(GameComponent.ComponentPhases.POST_PHYSICS.ordinal());
+		super.setPhase(GameComponent.ComponentPhases.THINK.ordinal());
 	}
 	
 	@Override

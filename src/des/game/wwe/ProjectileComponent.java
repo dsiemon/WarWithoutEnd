@@ -17,10 +17,12 @@ package des.game.wwe;
 
 import des.game.base.BaseObject;
 import des.game.base.CollisionComponent;
+import des.game.base.GameComponent;
 import des.game.base.GameObject;
 import des.game.base.Vector2;
 import des.game.physics.CollisionBehavior;
 import des.game.physics.PhysicsObject;
+import des.game.physics.VectorObject;
 import des.game.physics.Velocity;
 
 public class ProjectileComponent extends CollisionComponent {
@@ -38,7 +40,19 @@ public class ProjectileComponent extends CollisionComponent {
 	public boolean spawnExplosion;
 	public float explosionRadius;
 	public float explosionPower;
-	
+    public void initializeFromTemplate(GameComponent other, float x,float y,float orientation,float velocity,float lifetime){
+    	ProjectileComponent comp = (ProjectileComponent) other;
+    	this.maxLifeTime = comp.maxLifeTime;
+    	
+
+    	this.maxCollisions = comp.maxCollisions;
+    	
+    	this.armorPierceingValue = comp.armorPierceingValue;
+    	this.damageValue = comp.damageValue;
+    	this.dampenValue = comp.dampenValue;
+    	
+    	this.spawnExplosion = comp.spawnExplosion;
+    }
 	public ProjectileComponent(){
 		super();
 		
@@ -113,10 +127,10 @@ public class ProjectileComponent extends CollisionComponent {
 	    	position.y = (float)this.physicsObject.getLocation().getY();
 	    	
 	    	if(this.physicsObject.getVector() != null){
-		    	final Velocity v = this.physicsObject.getVector().getVelocity();
+		    	final VectorObject v = this.physicsObject.getVector();
 		    	final Vector2 velocity = gameObject.velocity;
-		    	velocity.x = (float)v.getXComponent();
-		    	velocity.y = (float)v.getYComponent();
+		    	velocity.x = (float)v.getVelocityXComponent();
+		    	velocity.y = (float)v.getVelocityYComponent();
 		    	
 		    	gameObject.targetVelocity.x = velocity.x;
 		    	gameObject.targetVelocity.y = velocity.y;
