@@ -107,13 +107,13 @@ public class ProjectileComponent extends CollisionComponent {
 	
 	@Override
     public void update(float timeDelta, BaseObject parent) {
-
+		
 		timeSinceCreation += timeDelta;
 		// if the object has exceeded its lifetime or if it has a max collision setting and it has exceeded that destroy the object
 		if(timeSinceCreation > maxLifeTime || (maxCollisions > 0 && numCollisions >= maxCollisions)){
 			
 			if(spawnExplosion){
-				//TODO spawn explosion here
+				BaseObject.sSystemRegistry.gameObjectManager.add(WWEObjectRegistry.gameObjectFactory.buildObject(WWEObjectFactory.GameObjectType.EXPLOSION_LARGE, (float)this.physicsObject.getLocation().getX(), (float)this.physicsObject.getLocation().getY(), 0, 0,0));
 			}
 		
 			BaseObject.sSystemRegistry.gameObjectManager.destroy((GameObject)parent);

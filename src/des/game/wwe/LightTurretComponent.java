@@ -28,7 +28,7 @@ public class LightTurretComponent extends ActiveTurretComponent {
 	public static final float RELOAD_RATE = 2;
 	public static final float RELOAD_DELAY = 1;
 	
-	public static final float MAX_AMMO = 30f;
+	public static final float MAX_AMMO = 60f;
 	public static final float FIRE_RATE = 0.1f;
 	
 	public boolean active;

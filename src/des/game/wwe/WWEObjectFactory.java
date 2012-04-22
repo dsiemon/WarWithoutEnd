@@ -103,6 +103,7 @@ public class WWEObjectFactory extends ScaleObjectFactory{
                 new ComponentClass(Rectangle.class, 200),
                 new ComponentClass(Polygon.class, 20),
                 new ComponentClass(WaveBulletField.class, 100),
+                new ComponentClass(ExplosionComponent.class, 100)
         };
         
         this.setupComponentPools(componentTypes);
@@ -130,6 +131,8 @@ public class WWEObjectFactory extends ScaleObjectFactory{
         AUTO_TURRET(13),
         WAVE_BULLET(14),
         WAVE_TURRET(15),
+        EXPLOSION_LARGE(16),
+        ROCKET(16),
         // End
         OBJECT_COUNT(-1);
         

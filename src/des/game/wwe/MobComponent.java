@@ -142,7 +142,7 @@ public class MobComponent extends CollisionComponent {
 		    	final Vector2 velocity = gameObject.velocity;
 		    	velocity.x = (float)vector.getUncontrolledX();
 		    	velocity.y = (float)vector.getUncontrolledY();
-		    	
+		    	changeDirection = true;
 		    	// modify the goal direction, if we changed directions recently
 		    	if(changeDirection){
 			    	float minDist = Math.abs(waypointGoal.x);
